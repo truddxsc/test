@@ -30,7 +30,7 @@ jobs:
         run: |
           sudo apt-get install -y xvfb  # Instal Xvfb untuk menyiapkan virtual display
           Xvfb :99 &  # Jalankan virtual display di background
-          python your_script.py  # Ganti dengan nama file skrip Python Anda
+          python run.py  # Ganti dengan nama file skrip Python Anda
 
       - name: Upload API output
         if: success()
