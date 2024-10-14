@@ -77,8 +77,16 @@ def clean_email(email):
     return email.split('@')[0].replace('+', '-').replace('.', '-')
 
 def sign_up_netlify(email):
-    # Membuka browser menggunakan undetected-chromedriver agar tidak terdeteksi sebagai bot
-    driver = uc.Chrome()  # Pastikan ChromeDriver ada di PATH sistem
+    # Menentukan opsi untuk Chrome
+    options = uc.ChromeOptions()
+    options.add_argument('--headless')  # Jalankan dalam mode headless
+    options.add_argument('--no-sandbox')  # Nonaktifkan sandbox
+    options.add_argument('--disable-dev-shm-usage')  # Nonaktifkan penggunaan dev/shm
+    options.add_argument('--disable-gpu')  # Nonaktifkan GPU
+    options.add_argument('--remote-debugging-port=9222')  # Debugging port
+
+    # Membuka browser menggunakan undetected-chromedriver
+    driver = uc.Chrome(options=options)  
     driver.get("https://app.netlify.com/signup")
 
     try:
