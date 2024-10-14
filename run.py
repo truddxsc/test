@@ -137,7 +137,7 @@ while emails:
     
     # Get the copied text and write it to the console and the file
     copied_text = pyperclip.paste()  # Get the copied text from clipboard
-    print(f"API: {copied_text}")  # Print the copied text to the console
+    print(f"{copied_text}")  # Print the copied text to the console
     
     # Write the copied API to a file (append mode)
     with open('api.txt', 'a') as api_file:
