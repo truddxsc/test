@@ -1,4 +1,4 @@
-name: Run Netlify Bot
+name: Run Akun
 
 on:
   push:
