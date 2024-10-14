@@ -3,7 +3,7 @@ name: Run Netlify Bot
 on:
   push:
     branches:
-      - main  # Menjalankan job ini ketika ada push ke branch 'main'
+      - main
   workflow_dispatch:  # Memungkinkan workflow dijalankan secara manual
 
 jobs:
@@ -21,6 +21,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xclip  # Menambahkan instalasi xclip untuk clipboard
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -28,8 +30,7 @@ jobs:
         env:
           DISPLAY: :99  # Untuk headless chrome jika diperlukan
         run: |
-          sudo apt-get install -y xvfb  # Instal Xvfb untuk menyiapkan virtual display
-          Xvfb :99 &  # Jalankan virtual display di background
+          Xvfb :99 &  # Menjalankan virtual display di background
           python run.py  # Ganti dengan nama file skrip Python Anda
 
       - name: Upload API output
