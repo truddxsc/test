@@ -1,0 +1,3 @@
+selenium
+pyperclip
+undetected-chromedriver
