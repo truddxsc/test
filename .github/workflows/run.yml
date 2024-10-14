@@ -1,0 +1,40 @@
+name: Run Netlify Bot
+
+on:
+  push:
+    branches:
+      - main  # Menjalankan job ini ketika ada push ke branch 'main'
+  workflow_dispatch:  # Memungkinkan workflow dijalankan secara manual
+
+jobs:
+  run-netlify-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # Versi Python yang Anda butuhkan
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Netlify Bot Script
+        env:
+          DISPLAY: :99  # Untuk headless chrome jika diperlukan
+        run: |
+          sudo apt-get install -y xvfb  # Instal Xvfb untuk menyiapkan virtual display
+          Xvfb :99 &  # Jalankan virtual display di background
+          python your_script.py  # Ganti dengan nama file skrip Python Anda
+
+      - name: Upload API output
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-results
+          path: api.txt  # Mengunggah hasil API ke GitHub sebagai artifact
