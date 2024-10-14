@@ -1,4 +1,4 @@
-name: Create Akun
+name: Netlify Signup Automation
 
 on:
   push:
@@ -27,11 +27,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Download ChromeDriver (undetected-chromedriver requirement)
-      - name: Download ChromeDriver
+      # Step 4: Install Chrome and ChromeDriver
+      - name: Install Chrome and ChromeDriver
         run: |
-          sudo apt-get install -y chromium-chromedriver
-          sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          # Remove existing symbolic link if it exists
+          if [ -f /usr/bin/chromedriver ]; then
+            sudo rm /usr/bin/chromedriver
+          fi
+          # Create a new symbolic link
+          sudo ln -s /usr/bin/chromium-chromedriver /usr/bin/chromedriver
 
       # Step 5: Install additional libraries for Selenium and clipboard handling
       - name: Install xclip for pyperclip and dependencies
