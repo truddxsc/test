@@ -1,4 +1,4 @@
-name: Netlify SignUp Automation
+name: Create Akun
 
 on:
   push:
