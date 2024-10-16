@@ -156,7 +156,7 @@ while emails:
     time.sleep(1)  # Short wait for clipboard to update
     
     # Get the copied text and write it to the console and the file
-    copied_text = get_clipboard_text()  # Get the copied text from clipboard
+    # copied_text = pyperclip.paste()
     print(f"API: {copied_text}")  # Print the copied text to the console
     
     # Write the copied API to a file (append mode)
