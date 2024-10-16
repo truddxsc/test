@@ -1,11 +1,11 @@
 import time
 import random
 import string
-from selenium import webdriver
+import pyperclip  # Make sure to install this package using pip
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-import undetected_chromedriver as uc  # Correct import
 
 # Function to generate a random site name
 def generate_random_site_name():
@@ -27,13 +27,13 @@ with open('akun.txt', 'r') as file:
 while emails:
     email = emails.pop(0)  # Take the first email from the list and remove it
     
-    # Setup driver using undetected_chromedriver
-    driver = uc.Chrome()  # Use undetected ChromeDriver
+    # Setup undetected ChromeDriver
+    driver = uc.Chrome()  # This replaces the regular webdriver.Chrome()
     driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
     def wait_for_window(timeout=2):
-        time.sleep(timeout)
+        time.sleep(round(timeout / 1000))
         wh_now = driver.window_handles
         wh_then = vars["window_handles"]
         if len(wh_now) > len(wh_then):
@@ -103,9 +103,12 @@ while emails:
     driver.switch_to.window(vars["root"])
     time.sleep(5)
     
-    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Ftitied') and contains(@aria-label, 'titied')]")
+    # Mencari elemen dengan href link yang sesuai dan melakukan klik
+    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
     actions.move_to_element(element).perform()
     time.sleep(2)
+
+    # Klik elemen tersebut
     element.click()
     time.sleep(5)
     
@@ -128,29 +131,26 @@ while emails:
     driver.find_element(By.NAME, "title").send_keys(Keys.ENTER)  # Submit the input
     time.sleep(5)
     
-    # Save the API directly to a file
-    api_element = driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon")
-    api_element.click()
-    time.sleep(1)  # Short wait for the action to complete
+    # Click the copy button
+    driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon").click()
+    time.sleep(1)  # Short wait for clipboard to update
     
-    # Instead of using pyperclip, wait for the element containing the API key to appear
-    time.sleep(2)  # Adjust based on how long it takes to display
-    copied_text = driver.find_element(By.CSS_SELECTOR, "selector-for-api-key").text  # Update with the correct selector
-
-    print(f"API: {copied_text}")  # Print the copied text to the console
+    # Get the copied text and write it to the console and the file
+    copied_text = pyperclip.paste()  # Get the copied text from clipboard
+    print(f"{copied_text}")  # Print the copied text to the console
     
     # Write the copied API to a file (append mode)
     with open('api.txt', 'a') as api_file:
         api_file.write(f"{copied_text}\n")
     
-    # Wait before processing the next email
+    # Jeda 5 detik
     time.sleep(5)
     
-    # Close browser after one email is processed
+    # Tutup browser setelah satu email diproses
     driver.quit()
     
-    # Wait a moment before repeating the process if there are still emails
+    # Tunggu sebentar sebelum mengulangi proses jika masih ada email
     time.sleep(2)
 
-# After all emails are processed, program completes
+# Setelah semua email diproses, program selesai
 print("Semua email selesai diproses.")
