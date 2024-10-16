@@ -63,14 +63,18 @@ def get_verification_link_from_email(service, query):
 
     return None
 
-def generate_random_name(length=8):
-    # Generate a random name consisting of lowercase letters
+def generate_random_name(length=4):
     return ''.join(random.choices(string.ascii_lowercase, k=length))
 
-def generate_random_email():
-    # Generate email with a random lowercase name
-    random_name = generate_random_name()
-    return f"mr.platra10+{random_name}@butyusa.com"
+def get_email_from_file(file_path):
+    with open(file_path, 'r') as file:
+        emails = file.readlines()
+    
+    return [email.strip() for email in emails if email.strip()]  # Return non-empty emails
+
+def clean_email(email):
+    # Mengganti tanda +, . dengan - dan menghapus domain "@butyusa.com"
+    return email.split('@')[0].replace('+', '-').replace('.', '-')
 
 def sign_up_netlify(email):
     # Membuka browser dan navigasi ke halaman sign up Netlify
@@ -84,7 +88,7 @@ def sign_up_netlify(email):
         )
         sign_up_with_email_button.click()
 
-        # Isi email yang dihasilkan
+        # Isi email dari test.txt
         email_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.NAME, "email"))
         )
@@ -126,10 +130,10 @@ def verify_netlify_account(driver):
         print('Link verifikasi tidak ditemukan.')
 
 def fill_in_additional_details(driver, email):
-    sleep(10)  # Tunggu 10 detik
+    sleep(10)  # Tunggu 15 detik
 
     # Buka URL sesuai format email
-    modified_email = email.split('@')[0].replace('+', '-')  # Clean email for URL
+    modified_email = clean_email(email)
     url = f"https://app.netlify.com/teams/{modified_email}/sites"
     driver.get(url)
 
@@ -138,21 +142,23 @@ def fill_in_additional_details(driver, email):
     # Tutup browser
     driver.quit()
 
-if __name__ == '__main__':
-    # Ambil jumlah email yang diinginkan
-    number_of_emails = 2  # Ubah sesuai kebutuhan
-    emails = [generate_random_email() for _ in range(number_of_emails)]
-    
-    # Simpan email yang dihasilkan ke akun.txt
-    with open('akun.txt', 'w') as file:
-        for email in emails:
-            file.write(email + '\n')
-    
-    print(f"Generated emails saved to akun.txt: {emails}")
+def create_random_emails(file_path):
+    with open(file_path, 'w') as file:
+        for _ in range(5):  # Buat 5 email acak
+            random_name = generate_random_name()
+            email = f"mr.platra10+{random_name}@butyusa.com"
+            file.write(f"{email}\n")
 
+if __name__ == '__main__':
+    # Buat email acak baru dan simpan di test.txt
+    create_random_emails('test.txt')
+
+    # Ambil semua email dari file test.txt
+    emails = get_email_from_file('test.txt')
+    
     for email in emails:
         print(f"Processing email: {email}")
-        # Langkah 1: Daftar Netlify dengan email yang dihasilkan
+        # Langkah 1: Daftar Netlify dengan email dari test.txt
         driver = sign_up_netlify(email)
         
         # Langkah 2: Verifikasi akun Netlify dengan link dari email
