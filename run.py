@@ -2,13 +2,13 @@ import time
 import random
 import string
 import pyperclip  # Make sure to install this package using pip
-import undetected_chromedriver as uc
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager  # Automatically manage ChromeDriver
+from fake_useragent import UserAgent  # To generate random User-Agent
 
 # Function to generate a random site name
 def generate_random_site_name():
@@ -26,19 +26,25 @@ def generate_random_site_name():
 with open('akun.txt', 'r') as file:
     emails = [line.strip() for line in file.readlines()]
 
+# Set up user agent
+ua = UserAgent()
+user_agent = ua.random  # Get a random User-Agent string
+
 # Loop through each email address until the list is empty
 while emails:
     email = emails.pop(0)  # Take the first email from the list and remove it
     
-    # Setup undetected ChromeDriver with WebDriver Manager for automatic driver installation
-    options = uc.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+    # Setup driver with options to make it undetectable
+    options = webdriver.ChromeOptions()
+    options.add_argument("--no-sandbox")  # Bypass OS security model
+    options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
+    options.add_argument(f'user-agent={user_agent}')  # Use the random user-agent
+    options.add_argument("--disable-blink-features=AutomationControlled")  # Disable automation flags
+    options.add_argument("--headless")  # Optional: Run in headless mode if no UI is needed
+    options.add_argument("--window-size=1200,1000")  # Set initial window size
     
-    # Initialize Chrome with Service and Options
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
+    # Initialize the driver
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
@@ -52,9 +58,6 @@ while emails:
     # Start the automation
     driver.get("https://app.netlify.com/login")
     time.sleep(5)
-    
-    driver.set_window_size(1200, 1000)
-    time.sleep(3)
     
     driver.find_element(By.CSS_SELECTOR, ".tw-text-left").click()
     time.sleep(5)
@@ -113,12 +116,10 @@ while emails:
     driver.switch_to.window(vars["root"])
     time.sleep(5)
     
-    # Find the element with the matching href link and click it
-    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
+    # Click the relevant link
+    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Ftitied') and contains(@aria-label, 'titied')]")
     actions.move_to_element(element).perform()
     time.sleep(2)
-
-    # Click the element
     element.click()
     time.sleep(5)
     
@@ -147,20 +148,20 @@ while emails:
     
     # Get the copied text and write it to the console and the file
     copied_text = pyperclip.paste()  # Get the copied text from clipboard
-    print(f"{copied_text}")  # Print the copied text to the console
+    print(f"API: {copied_text}")  # Print the copied text to the console
     
     # Write the copied API to a file (append mode)
     with open('api.txt', 'a') as api_file:
         api_file.write(f"{copied_text}\n")
     
-    # Wait 5 seconds
+    # Wait before closing the browser
     time.sleep(5)
     
-    # Close the browser after one email is processed
+    # Close the browser after processing one email
     driver.quit()
     
-    # Wait a moment before repeating the process if there are still emails
+    # Wait a moment before repeating the process if there are more emails
     time.sleep(2)
 
-# When all emails are processed, the program is complete
+# After all emails are processed, the program is finished
 print("All emails have been processed.")
