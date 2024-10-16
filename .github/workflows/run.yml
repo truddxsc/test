@@ -3,7 +3,8 @@ name: Run Selenium Script
 on:
   push:
     branches:
-      - main  # Change to your main branch name
+      - main
+  workflow_dispatch:
 
 jobs:
   run-selenium:
