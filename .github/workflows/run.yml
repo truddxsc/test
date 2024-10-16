@@ -19,11 +19,16 @@ jobs:
       with:
         python-version: '3.10.14'  # Specify your Python version
 
+    - name: Install xclip
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xclip
+
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        pip install selenium  # Removed pyperclip installation
+        pip install pyperclip selenium
 
     - name: Run the script
       run: |
-        python run.py  # Ensure your script is named run.py
+        python run.py  # Replace with the name of your script
