@@ -6,8 +6,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 
 # Function to generate a random site name
 def generate_random_site_name():
@@ -29,13 +27,8 @@ with open('akun.txt', 'r') as file:
 while emails:
     email = emails.pop(0)  # Take the first email from the list and remove it
     
-    # Setup driver with headless options
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Enable headless mode
-    chrome_options.add_argument("--no-sandbox")  # Improve stability
-    chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
-    driver = webdriver.Chrome(service=Service(), options=chrome_options)  # If specific path is needed: webdriver.Chrome(executable_path='/path/to/chromedriver')
-    
+    # Setup driver (assuming ChromeDriver is in the system's PATH)
+    driver = webdriver.Chrome()  # If specific path is needed: webdriver.Chrome(executable_path='/path/to/chromedriver')
     driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
