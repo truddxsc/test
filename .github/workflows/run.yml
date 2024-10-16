@@ -21,12 +21,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install selenium pyperclip  # Install library yang diperlukan
+          pip install selenium google-auth google-auth-oauthlib google-api-python-client pyperclip
 
       - name: Run create.py
         run: |
           python create.py  # Menjalankan skrip pertama
-
-      - name: Run run.py
-        run: |
-          python run.py  # Menjalankan skrip kedua
