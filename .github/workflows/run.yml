@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Check out the repository
       uses: actions/checkout@v2
 
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.10.14'
+        python-version: '3.10'  # Sesuaikan versi Python jika perlu
 
     - name: Install dependencies
       run: |
@@ -38,7 +38,7 @@ jobs:
 
     - name: Archive results
       if: always()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3  # Menggunakan versi v3 yang terbaru
       with:
         name: api-output
         path: api.txt
