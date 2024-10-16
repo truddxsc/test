@@ -1,41 +1,34 @@
-name: Run Akun
+name: Run Script
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch:  # Memungkinkan workflow dijalankan secara manual
+      - main  # Change to your main branch name
+  workflow_dispatch:  # Allows manual triggering of the workflow
 
 jobs:
-  run-netlify-bot:
-    runs-on: ubuntu-latest
+  run-script:
+    runs-on: ubuntu-latest  # Use Ubuntu as the runner
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.10'  # Versi Python yang Anda butuhkan
+          python-version: '3.8'  # Specify your Python version here
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb xclip  # Menambahkan instalasi xclip untuk clipboard
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt  # Make sure to have a requirements.txt with all your dependencies
 
-      - name: Run Selenium script
-        env:
-          DISPLAY: :99
+      - name: Run Python Script
         run: |
-          Xvfb :99 &  # Menjalankan virtual display di background
-          python run.py
+          python run.py  # Command to run your script
 
-      - name: Archive results
-        if: always()
-        uses: actions/upload-artifact@v3  # Menggunakan versi v3 yang terbaru
+      - name: Upload API Output
+        uses: actions/upload-artifact@v2
         with:
           name: api-output
-          path: api.txt
+          path: api.txt  # Path to the file containing the copied API
