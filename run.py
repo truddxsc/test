@@ -2,10 +2,11 @@ import time
 import random
 import string
 import pyperclip
-import undetected_chromedriver as uc  # Ganti v2 dengan undetected_chromedriver
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Function to generate a random site name
 def generate_random_site_name():
@@ -33,8 +34,8 @@ while emails:
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--headless")  # Set headless mode
 
-    # Initialize ChromeDriver
-    driver = uc.Chrome(options=chrome_options)
+    # Initialize ChromeDriver using webdriver-manager
+    driver = uc.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
     driver.implicitly_wait(10)
     vars = {}
     
