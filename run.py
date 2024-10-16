@@ -1,15 +1,11 @@
 import time
 import random
 import string
-import pyperclip  # Ensure this package is installed
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import undetected_chromedriver.v2 as uc  # Import undetected_chromedriver
 
 # Function to generate a random site name
 def generate_random_site_name():
@@ -23,14 +19,6 @@ def generate_random_site_name():
     )
     return site_name
 
-# Function to wait for a new window to open
-def wait_for_window(driver, previous_window_handles, timeout=10):
-    WebDriverWait(driver, timeout).until(
-        lambda d: len(d.window_handles) > len(previous_window_handles)
-    )
-    new_window_handles = set(driver.window_handles) - set(previous_window_handles)
-    return new_window_handles.pop()  # Return the new window handle
-
 # Read email addresses from akun.txt
 with open('akun.txt', 'r') as file:
     emails = [line.strip() for line in file.readlines()]
@@ -39,116 +27,130 @@ with open('akun.txt', 'r') as file:
 while emails:
     email = emails.pop(0)  # Take the first email from the list and remove it
     
-    # Setup Chrome options
-    options = Options()
-    options.add_argument("--headless")  # Run in headless mode (without GUI)
-    options.add_argument("--no-sandbox")  # Bypass OS security model
-    options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
-
-    # Setup driver (assuming ChromeDriver is pre-installed in GitHub Action environment)
-    service = Service('/usr/bin/chromedriver')  # Path to chromedriver in GitHub Actions
-    driver = webdriver.Chrome(service=service, options=options)
-
+    # Setup driver using undetected_chromedriver
+    driver = uc.Chrome()  # Use undetected ChromeDriver
+    driver.implicitly_wait(10)  # Optional wait time to ensure elements load
+    vars = {}
+    
+    def wait_for_window(timeout=2):
+        time.sleep(timeout)
+        wh_now = driver.window_handles
+        wh_then = vars["window_handles"]
+        if len(wh_now) > len(wh_then):
+            return set(wh_now).difference(set(wh_then)).pop()
+    
     # Start the automation
     driver.get("https://app.netlify.com/login")
-    
-    # Wait for elements to be present
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, ".tw-text-left")))
     time.sleep(5)
     
     driver.set_window_size(1200, 1000)
     time.sleep(3)
     
     driver.find_element(By.CSS_SELECTOR, ".tw-text-left").click()
+    time.sleep(5)
     
-    # Wait for the input fields to load
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "email")))
+    element = driver.find_element(By.CSS_SELECTOR, ".tw-text-left")
+    actions = ActionChains(driver)
+    actions.move_to_element(element).perform()
+    time.sleep(5)
+    
+    element = driver.find_element(By.CSS_SELECTOR, "body")
+    actions.move_to_element(element).perform()
+    time.sleep(5)
     
     # Input the email and password
+    driver.find_element(By.NAME, "email").click()
     driver.find_element(By.NAME, "email").clear()  # Clear previous email
     driver.find_element(By.NAME, "email").send_keys(email)  # Use the current email
     time.sleep(3)
     
+    driver.find_element(By.NAME, "password").click()
     driver.find_element(By.NAME, "password").clear()  # Clear previous password if necessary
     driver.find_element(By.NAME, "password").send_keys("LeviYiyi123@")  # Replace with your password
     time.sleep(3)
     
     driver.find_element(By.CSS_SELECTOR, ".tw-flex > .btn").click()
+    time.sleep(5)
     
-    # Wait for the import link to be clickable
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.LINK_TEXT, "Import from Git")))
+    element = driver.find_element(By.LINK_TEXT, "Import from Git")
+    actions.move_to_element(element).perform()
+    time.sleep(5)
+    
     driver.find_element(By.LINK_TEXT, "Import from Git").click()
+    time.sleep(5)
     
-    # Wait for the Bitbucket button to be clickable
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Bitbucket']")))
+    vars["window_handles"] = driver.window_handles
     driver.find_element(By.XPATH, "//button[text()='Bitbucket']").click()
+    time.sleep(5)
     
-    # Handle window switching
-    previous_window_handles = driver.window_handles
-    vars = {}
-    vars["win3727"] = wait_for_window(driver, previous_window_handles)  # Using the defined function
+    vars["win3727"] = wait_for_window(2000)
     vars["root"] = driver.current_window_handle
     driver.switch_to.window(vars["win3727"])
-
+    time.sleep(5)
+    
     # Log in to Bitbucket
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "username")))
+    driver.find_element(By.ID, "username").click()
     driver.find_element(By.ID, "username").send_keys("geivux1+fatiscent@outlook.com")
     driver.find_element(By.ID, "username").send_keys(Keys.ENTER)
-
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "password")))
+    time.sleep(5)
+    
+    driver.find_element(By.ID, "password").click()
     driver.find_element(By.ID, "password").send_keys("AyLevy123@")
     driver.find_element(By.ID, "password").send_keys(Keys.ENTER)
-
+    time.sleep(5)
+    
     # Switch back to the root window
     driver.switch_to.window(vars["root"])
+    time.sleep(5)
     
-    # Wait for the element containing the href link to be clickable
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Ftitied') and contains(@aria-label, 'titied')]")))
     element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Ftitied') and contains(@aria-label, 'titied')]")
+    actions.move_to_element(element).perform()
+    time.sleep(2)
     element.click()
-
+    time.sleep(5)
+    
     driver.find_element(By.NAME, "siteName").click()
     site_name = generate_random_site_name()  # Generate random site name
     driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Use the generated random site name
     driver.find_element(By.NAME, "siteName").send_keys(Keys.ENTER)
+    time.sleep(5)
     
     driver.find_element(By.CSS_SELECTOR, "#deploys-secondary-nav-item .tw-transition").click()
+    time.sleep(5)
     
-    # Wait for and click the button
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".btn-secondary:nth-child(1) > .tw-flex")))
     driver.find_element(By.CSS_SELECTOR, ".btn-secondary:nth-child(1) > .tw-flex").click()
+    time.sleep(5)
     
-    # Wait for and click the card button
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".card:nth-child(8) .btn")))
     driver.find_element(By.CSS_SELECTOR, ".card:nth-child(8) .btn").click()
+    time.sleep(5)
     
     driver.find_element(By.NAME, "title").send_keys("asc")  # Use the name attribute for the title input
     driver.find_element(By.NAME, "title").send_keys(Keys.ENTER)  # Submit the input
+    time.sleep(5)
     
-    # Click the copy button
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon")))
-    driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon").click()
+    # Save the API directly to a file
+    api_element = driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon")
+    api_element.click()
+    time.sleep(1)  # Short wait for the action to complete
     
-    time.sleep(1)  # Short wait for clipboard to update
-    
-    # Get the copied text and write it to the console and the file
-    copied_text = pyperclip.paste()  # Get the copied text from clipboard
+    # Instead of using pyperclip, wait for the element containing the API key to appear
+    time.sleep(2)  # Adjust based on how long it takes to display
+    copied_text = driver.find_element(By.CSS_SELECTOR, "selector-for-api-key").text  # Update with the correct selector
+
     print(f"API: {copied_text}")  # Print the copied text to the console
     
     # Write the copied API to a file (append mode)
     with open('api.txt', 'a') as api_file:
         api_file.write(f"{copied_text}\n")
     
-    # Jeda 5 detik
+    # Wait before processing the next email
     time.sleep(5)
     
-    # Tutup browser setelah satu email diproses
+    # Close browser after one email is processed
     driver.quit()
     
-    # Tunggu sebentar sebelum mengulangi proses jika masih ada email
+    # Wait a moment before repeating the process if there are still emails
     time.sleep(2)
 
-# Setelah semua email diproses, program selesai
+# After all emails are processed, program completes
 print("Semua email selesai diproses.")
