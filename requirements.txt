@@ -3,3 +3,6 @@ selenium
 pyperclip
 webdriver-manager
 fake-useragent
+google-auth
+google-auth-oauthlib
+google-api-python-client
