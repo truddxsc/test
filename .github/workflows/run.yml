@@ -7,24 +7,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-selenium:
+  run-netlify-bot:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'  # Sesuaikan versi Python jika perlu
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # Versi Python yang Anda butuhkan
 
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y xvfb xclip  # Menambahkan instalasi xclip untuk clipboard
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install webdriver-manager undetected-chromedriver pyperclip
 
     - name: Install Chrome
       run: |
@@ -35,7 +35,7 @@ jobs:
       env:
         DISPLAY: :99
       run: |
-        Xvfb :99 -screen 0 1024x768x16 &
+        Xvfb :99 &  # Menjalankan virtual display di background
         python run.py
 
     - name: Archive results
