@@ -28,7 +28,7 @@ jobs:
           python run.py  # Command to run your script
 
       - name: Upload API Output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: api-output
           path: api.txt  # Path to the file containing the copied API
