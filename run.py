@@ -3,6 +3,8 @@ import random
 import string
 import pyperclip  # Make sure to install this package using pip
 import undetected_chromedriver as uc
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -27,15 +29,14 @@ with open('akun.txt', 'r') as file:
 while emails:
     email = emails.pop(0)  # Take the first email from the list and remove it
     
-    # Setup undetected ChromeDriver with additional options
+    # Setup undetected ChromeDriver with WebDriver Manager for automatic driver installation
     options = uc.ChromeOptions()
-    options.binary_location = '/usr/bin/google-chrome'  # Specify the Chrome binary location
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     
-    # Initialize Chrome with undetected_chromedriver
-    driver = uc.Chrome(options=options)
+    # Initialize Chrome with automatic driver download
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
