@@ -4,6 +4,7 @@ import string
 import pyperclip  # Make sure to install this package using pip
 import undetected_chromedriver as uc
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -35,8 +36,9 @@ while emails:
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     
-    # Initialize Chrome with automatic driver download and explicit executable_path
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
+    # Initialize Chrome with Service and Options
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=options)
     driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
