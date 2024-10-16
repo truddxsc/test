@@ -6,7 +6,6 @@ import undetected_chromedriver.v2 as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
 
 # Function to generate a random site name
 def generate_random_site_name():
@@ -27,12 +26,12 @@ with open('akun.txt', 'r') as file:
 while emails:
     email = emails.pop(0)
     
-    # Setup ChromeDriver with undetected_chromedriver and WebDriver Manager
+    # Setup ChromeDriver with undetected_chromedriver
     chrome_options = uc.ChromeOptions()
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")  # Set headless mode
 
     # Initialize ChromeDriver
     driver = uc.Chrome(options=chrome_options)
