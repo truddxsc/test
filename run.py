@@ -27,8 +27,15 @@ with open('akun.txt', 'r') as file:
 while emails:
     email = emails.pop(0)  # Take the first email from the list and remove it
     
-    # Setup undetected ChromeDriver
-    driver = uc.Chrome()  # This replaces the regular webdriver.Chrome()
+    # Setup undetected ChromeDriver with additional options
+    options = uc.ChromeOptions()
+    options.binary_location = '/usr/bin/google-chrome'  # Specify the Chrome binary location
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    
+    # Initialize Chrome with undetected_chromedriver
+    driver = uc.Chrome(options=options)
     driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
@@ -103,12 +110,12 @@ while emails:
     driver.switch_to.window(vars["root"])
     time.sleep(5)
     
-    # Mencari elemen dengan href link yang sesuai dan melakukan klik
+    # Find the element with the matching href link and click it
     element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
     actions.move_to_element(element).perform()
     time.sleep(2)
 
-    # Klik elemen tersebut
+    # Click the element
     element.click()
     time.sleep(5)
     
@@ -143,14 +150,14 @@ while emails:
     with open('api.txt', 'a') as api_file:
         api_file.write(f"{copied_text}\n")
     
-    # Jeda 5 detik
+    # Wait 5 seconds
     time.sleep(5)
     
-    # Tutup browser setelah satu email diproses
+    # Close the browser after one email is processed
     driver.quit()
     
-    # Tunggu sebentar sebelum mengulangi proses jika masih ada email
+    # Wait a moment before repeating the process if there are still emails
     time.sleep(2)
 
-# Setelah semua email diproses, program selesai
-print("Semua email selesai diproses.")
+# When all emails are processed, the program is complete
+print("All emails have been processed.")
