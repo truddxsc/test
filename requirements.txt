@@ -1,3 +1,4 @@
+undetected-chromedriver
 selenium
 pyperclip
-undetected-chromedriver
+webdriver-manager
