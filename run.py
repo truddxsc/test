@@ -35,8 +35,8 @@ while emails:
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     
-    # Initialize Chrome with automatic driver download
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    # Initialize Chrome with automatic driver download and explicit executable_path
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=options)
     driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
