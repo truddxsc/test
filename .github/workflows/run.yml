@@ -21,6 +21,8 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb xclip  # Menambahkan instalasi xclip untuk clipboard
         pip install -r requirements.txt
         pip install webdriver-manager undetected-chromedriver pyperclip
 
