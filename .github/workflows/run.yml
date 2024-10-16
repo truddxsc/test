@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Ganti dengan versi Python yang Anda butuhkan
+          python-version: '3.10.14'  # Ganti dengan versi Python yang Anda butuhkan
 
       - name: Install dependencies
         run: |
@@ -25,4 +25,8 @@ jobs:
 
       - name: Run create.py
         run: |
-          python run.py  # Menjalankan skrip pertama
+          python create.py
+
+      - name: Run run.py
+        run: |
+          python run.py
