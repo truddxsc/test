@@ -26,9 +26,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Download Chrome
+        run: |
+          sudo apt-get install -y wget unzip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+          google-chrome --version
+
       - name: Run Netlify Bot Script
         env:
           DISPLAY: :99  # Untuk headless chrome jika diperlukan
+          CHROME_PATH: /usr/bin/google-chrome
+          CHROMEDRIVER_PATH: /usr/local/bin/chromedriver
         run: |
           Xvfb :99 &  # Menjalankan virtual display di background
           python run.py  # Ganti dengan nama file skrip Python Anda
