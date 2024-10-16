@@ -1,6 +1,7 @@
 import time
 import random
 import string
+import pyperclip  # Ensure this package is installed
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -146,10 +147,8 @@ while emails:
     driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon").click()
     time.sleep(1)  # Short wait for clipboard to update
     
-    # Directly retrieve the copied text from the page
-    copied_text = driver.find_element(By.CSS_SELECTOR, ".selector-for-copied-text").text  # Adjust selector
-
     # Get the copied text and write it to the console and the file
+    copied_text = pyperclip.paste()  # Get the copied text from clipboard
     print(f"API: {copied_text}")  # Print the copied text to the console
     
     # Write the copied API to a file (append mode)
