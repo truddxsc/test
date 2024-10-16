@@ -1,21 +1,22 @@
 import time
 import random
 import string
-import pyperclip  # Make sure to install this package using pip
-import undetected_chromedriver as uc
+import pyperclip
+import undetected_chromedriver.v2 as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Function to generate a random site name
 def generate_random_site_name():
-    letters = string.ascii_lowercase  # lowercase letters
-    digits = string.digits  # digits
+    letters = string.ascii_lowercase
+    digits = string.digits
     site_name = (
-        ''.join(random.choices(letters, k=3)) +  # 3 random letters
-        ''.join(random.choices(digits, k=3)) +    # 3 random digits
-        ''.join(random.choices(letters, k=3)) +  # 3 random letters
-        ''.join(random.choices(digits, k=3))      # 3 random digits
+        ''.join(random.choices(letters, k=3)) +  
+        ''.join(random.choices(digits, k=3)) +    
+        ''.join(random.choices(letters, k=3)) +  
+        ''.join(random.choices(digits, k=3))      
     )
     return site_name
 
@@ -23,13 +24,18 @@ def generate_random_site_name():
 with open('akun.txt', 'r') as file:
     emails = [line.strip() for line in file.readlines()]
 
-# Loop through each email address until the list is empty
 while emails:
-    email = emails.pop(0)  # Take the first email from the list and remove it
+    email = emails.pop(0)
     
-    # Setup undetected ChromeDriver
-    driver = uc.Chrome()  # This replaces the regular webdriver.Chrome()
-    driver.implicitly_wait(10)  # Optional wait time to ensure elements load
+    # Setup ChromeDriver with undetected_chromedriver and WebDriver Manager
+    chrome_options = uc.ChromeOptions()
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--headless")
+    
+    driver = uc.Chrome(driver_executable_path=ChromeDriverManager().install(), options=chrome_options, use_subprocess=True)
+    driver.implicitly_wait(10)
     vars = {}
     
     def wait_for_window(timeout=2):
@@ -60,13 +66,13 @@ while emails:
     
     # Input the email and password
     driver.find_element(By.NAME, "email").click()
-    driver.find_element(By.NAME, "email").clear()  # Clear previous email
-    driver.find_element(By.NAME, "email").send_keys(email)  # Use the current email
+    driver.find_element(By.NAME, "email").clear()
+    driver.find_element(By.NAME, "email").send_keys(email)
     time.sleep(3)
     
     driver.find_element(By.NAME, "password").click()
-    driver.find_element(By.NAME, "password").clear()  # Clear previous password if necessary
-    driver.find_element(By.NAME, "password").send_keys("LeviYiyi123@")  # Replace with your password
+    driver.find_element(By.NAME, "password").clear()
+    driver.find_element(By.NAME, "password").send_keys("LeviYiyi123@")
     time.sleep(3)
     
     driver.find_element(By.CSS_SELECTOR, ".tw-flex > .btn").click()
@@ -103,18 +109,16 @@ while emails:
     driver.switch_to.window(vars["root"])
     time.sleep(5)
     
-    # Mencari elemen dengan href link yang sesuai dan melakukan klik
     element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
     actions.move_to_element(element).perform()
     time.sleep(2)
-
-    # Klik elemen tersebut
+    
     element.click()
     time.sleep(5)
     
     driver.find_element(By.NAME, "siteName").click()
-    site_name = generate_random_site_name()  # Generate random site name
-    driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Use the generated random site name
+    site_name = generate_random_site_name()
+    driver.find_element(By.NAME, "siteName").send_keys(site_name)
     driver.find_element(By.NAME, "siteName").send_keys(Keys.ENTER)
     time.sleep(5)
     
@@ -127,30 +131,21 @@ while emails:
     driver.find_element(By.CSS_SELECTOR, ".card:nth-child(8) .btn").click()
     time.sleep(5)
     
-    driver.find_element(By.NAME, "title").send_keys("asc")  # Use the name attribute for the title input
-    driver.find_element(By.NAME, "title").send_keys(Keys.ENTER)  # Submit the input
+    driver.find_element(By.NAME, "title").send_keys("asc")
+    driver.find_element(By.NAME, "title").send_keys(Keys.ENTER)
     time.sleep(5)
     
-    # Click the copy button
     driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon").click()
-    time.sleep(1)  # Short wait for clipboard to update
+    time.sleep(1)
     
-    # Get the copied text and write it to the console and the file
-    copied_text = pyperclip.paste()  # Get the copied text from clipboard
-    print(f"{copied_text}")  # Print the copied text to the console
+    copied_text = pyperclip.paste()
+    print(f"{copied_text}")
     
-    # Write the copied API to a file (append mode)
     with open('api.txt', 'a') as api_file:
         api_file.write(f"{copied_text}\n")
     
-    # Jeda 5 detik
     time.sleep(5)
-    
-    # Tutup browser setelah satu email diproses
     driver.quit()
-    
-    # Tunggu sebentar sebelum mengulangi proses jika masih ada email
     time.sleep(2)
 
-# Setelah semua email diproses, program selesai
 print("Semua email selesai diproses.")
