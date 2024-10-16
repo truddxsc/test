@@ -25,4 +25,4 @@ jobs:
 
       - name: Run create.py
         run: |
-          python create.py  # Menjalankan skrip pertama
+          python run.py  # Menjalankan skrip pertama
