@@ -33,8 +33,9 @@ while emails:
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--headless")
-    
-    driver = uc.Chrome(driver_executable_path=ChromeDriverManager().install(), options=chrome_options, use_subprocess=True)
+
+    # Initialize ChromeDriver
+    driver = uc.Chrome(options=chrome_options)
     driver.implicitly_wait(10)
     vars = {}
     
