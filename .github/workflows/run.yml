@@ -1,42 +1,32 @@
-name: Run Script
+name: Run Python Scripts
 
 on:
   push:
     branches:
-      - main  # Change to your main branch name
-  workflow_dispatch:  # Allows manual triggering of the workflow
+      - main  # Atur ini sesuai dengan cabang yang ingin Anda gunakan
+  workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual
 
 jobs:
-  run-script:
-    runs-on: ubuntu-latest  # Use Ubuntu as the runner
+  run-scripts:
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.10'  # Specify your Python version here
+          python-version: '3.9'  # Ganti dengan versi Python yang Anda butuhkan
 
-      - name: Install xclip
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb xclip
+          pip install selenium pyperclip  # Install library yang diperlukan
 
-      - name: Install Dependencies
+      - name: Run create.py
         run: |
-          pip install -r requirements.txt  # Make sure to have a requirements.txt with all your dependencies
+          python create.py  # Menjalankan skrip pertama
 
-      - name: Run Netlify Bot Script
-        env:
-          DISPLAY: :99  # Untuk headless chrome jika diperlukan
+      - name: Run run.py
         run: |
-          Xvfb :99 &  # Menjalankan virtual display di background
-          python run.py  # Ganti dengan nama file skrip Python Anda
-
-      - name: Upload API Output
-        uses: actions/upload-artifact@v3
-        with:
-          name: api-output
-          path: api.txt  # Path to the file containing the copied API
+          python run.py  # Menjalankan skrip kedua
