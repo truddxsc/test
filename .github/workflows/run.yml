@@ -22,7 +22,7 @@ jobs:
     - name: Install xclip
       run: |
         sudo apt-get update
-        sudo apt-get install -y xclip
+        sudo apt-get install -y xclip  # Install xclip for clipboard support
 
     - name: Install dependencies
       run: |
