@@ -23,6 +23,14 @@ def generate_random_site_name():
     )
     return site_name
 
+# Function to wait for a new window to open
+def wait_for_window(driver, previous_window_handles, timeout=10):
+    WebDriverWait(driver, timeout).until(
+        lambda d: len(d.window_handles) > len(previous_window_handles)
+    )
+    new_window_handles = set(driver.window_handles) - set(previous_window_handles)
+    return new_window_handles.pop()  # Return the new window handle
+
 # Read email addresses from akun.txt
 with open('akun.txt', 'r') as file:
     emails = [line.strip() for line in file.readlines()]
@@ -78,9 +86,9 @@ while emails:
     driver.find_element(By.XPATH, "//button[text()='Bitbucket']").click()
     
     # Handle window switching
+    previous_window_handles = driver.window_handles
     vars = {}
-    vars["window_handles"] = driver.window_handles
-    vars["win3727"] = wait_for_window(2000)  # Custom function not provided in your original code
+    vars["win3727"] = wait_for_window(driver, previous_window_handles)  # Using the defined function
     vars["root"] = driver.current_window_handle
     driver.switch_to.window(vars["win3727"])
 
