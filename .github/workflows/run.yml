@@ -21,7 +21,10 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb xclip  # Menambahkan instalasi xclip untuk clipboard
         pip install -r requirements.txt
+        python -m pip install --upgrade pip
         pip install undetected-chromedriver  # Install undetected-chromedriver
 
     - name: Run Selenium script
