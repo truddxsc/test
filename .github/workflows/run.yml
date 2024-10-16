@@ -23,6 +23,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xclip  # Install xclip for clipboard access
+          sudo apt-get install xselect
 
       - name: Install Dependencies
         run: |
