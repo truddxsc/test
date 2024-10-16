@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'  # Specify your Python version here
+          python-version: '3.10'  # Specify your Python version here
 
       - name: Install xclip
         run: |
@@ -33,7 +33,7 @@ jobs:
           python run.py  # Command to run your script
 
       - name: Upload API Output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: api-output
           path: api.txt  # Path to the file containing the copied API
