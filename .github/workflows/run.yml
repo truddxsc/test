@@ -19,6 +19,11 @@ jobs:
         with:
           python-version: '3.8'  # Specify your Python version here
 
+      - name: Install xclip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xclip  # Install xclip for clipboard access
+
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt  # Make sure to have a requirements.txt with all your dependencies
@@ -28,7 +33,7 @@ jobs:
           python run.py  # Command to run your script
 
       - name: Upload API Output
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: api-output
           path: api.txt  # Path to the file containing the copied API
