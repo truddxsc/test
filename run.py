@@ -9,15 +9,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager  # Automatically manage ChromeDriver
 from fake_useragent import UserAgent  # To generate random User-Agent
-import subprocess
-
-# Function to get text from clipboard using xclip
-def get_clipboard_text():
-    try:
-        return subprocess.check_output(['xclip', '-o', '-selection', 'clipboard']).decode('utf-8')
-    except Exception as e:
-        print(f"Error retrieving clipboard text: {e}")
-        return ""
 
 # Function to generate a random site name
 def generate_random_site_name():
