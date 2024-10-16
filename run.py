@@ -1,22 +1,23 @@
 import time
 import random
 import string
-import pyperclip
-import undetected_chromedriver as uc
+import pyperclip  # Make sure to install this package using pip
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 # Function to generate a random site name
 def generate_random_site_name():
-    letters = string.ascii_lowercase
-    digits = string.digits
+    letters = string.ascii_lowercase  # lowercase letters
+    digits = string.digits  # digits
     site_name = (
-        ''.join(random.choices(letters, k=3)) +  
-        ''.join(random.choices(digits, k=3)) +    
-        ''.join(random.choices(letters, k=3)) +  
-        ''.join(random.choices(digits, k=3))      
+        ''.join(random.choices(letters, k=3)) +  # 3 random letters
+        ''.join(random.choices(digits, k=3)) +    # 3 random digits
+        ''.join(random.choices(letters, k=3)) +  # 3 random letters
+        ''.join(random.choices(digits, k=3))      # 3 random digits
     )
     return site_name
 
@@ -24,19 +25,23 @@ def generate_random_site_name():
 with open('akun.txt', 'r') as file:
     emails = [line.strip() for line in file.readlines()]
 
+# Loop through each email address until the list is empty
 while emails:
-    email = emails.pop(0)
+    email = emails.pop(0)  # Take the first email from the list and remove it
     
-    # Setup ChromeDriver with undetected_chromedriver
-    chrome_options = uc.ChromeOptions()
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--headless")  # Set headless mode
+    # Setup Chrome options
+    options = Options()
+    options.add_argument("--headless")  # Run in headless mode (without GUI)
+    options.add_argument("--no-sandbox")  # Bypass OS security model
+    options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
 
-    # Initialize ChromeDriver using webdriver-manager
-    driver = uc.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
-    driver.implicitly_wait(10)
+    # Setup driver (assuming ChromeDriver is pre-installed in GitHub Action environment)
+    service = Service('/usr/bin/chromedriver')  # Path to chromedriver in GitHub Actions
+    driver = webdriver.Chrome(service=service, options=options)
+    
+    driver.implicitly_wait(10)  # Optional wait time to ensure elements load
     vars = {}
     
     def wait_for_window(timeout=2):
@@ -67,13 +72,13 @@ while emails:
     
     # Input the email and password
     driver.find_element(By.NAME, "email").click()
-    driver.find_element(By.NAME, "email").clear()
-    driver.find_element(By.NAME, "email").send_keys(email)
+    driver.find_element(By.NAME, "email").clear()  # Clear previous email
+    driver.find_element(By.NAME, "email").send_keys(email)  # Use the current email
     time.sleep(3)
     
     driver.find_element(By.NAME, "password").click()
-    driver.find_element(By.NAME, "password").clear()
-    driver.find_element(By.NAME, "password").send_keys("LeviYiyi123@")
+    driver.find_element(By.NAME, "password").clear()  # Clear previous password if necessary
+    driver.find_element(By.NAME, "password").send_keys("LeviYiyi123@")  # Replace with your password
     time.sleep(3)
     
     driver.find_element(By.CSS_SELECTOR, ".tw-flex > .btn").click()
@@ -110,16 +115,18 @@ while emails:
     driver.switch_to.window(vars["root"])
     time.sleep(5)
     
-    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
+    # Mencari elemen dengan href link yang sesuai dan melakukan klik
+    element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Ftitied') and contains(@aria-label, 'titied')]")
     actions.move_to_element(element).perform()
     time.sleep(2)
-    
+
+    # Klik elemen tersebut
     element.click()
     time.sleep(5)
     
     driver.find_element(By.NAME, "siteName").click()
-    site_name = generate_random_site_name()
-    driver.find_element(By.NAME, "siteName").send_keys(site_name)
+    site_name = generate_random_site_name()  # Generate random site name
+    driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Use the generated random site name
     driver.find_element(By.NAME, "siteName").send_keys(Keys.ENTER)
     time.sleep(5)
     
@@ -132,21 +139,30 @@ while emails:
     driver.find_element(By.CSS_SELECTOR, ".card:nth-child(8) .btn").click()
     time.sleep(5)
     
-    driver.find_element(By.NAME, "title").send_keys("asc")
-    driver.find_element(By.NAME, "title").send_keys(Keys.ENTER)
+    driver.find_element(By.NAME, "title").send_keys("asc")  # Use the name attribute for the title input
+    driver.find_element(By.NAME, "title").send_keys(Keys.ENTER)  # Submit the input
     time.sleep(5)
     
+    # Click the copy button
     driver.find_element(By.CSS_SELECTOR, ".tw-relative:nth-child(1) > .btn .scalable-icon").click()
-    time.sleep(1)
+    time.sleep(1)  # Short wait for clipboard to update
     
-    copied_text = pyperclip.paste()
-    print(f"{copied_text}")
+    # Get the copied text and write it to the console and the file
+    copied_text = pyperclip.paste()  # Get the copied text from clipboard
+    print(f"API: {copied_text}")  # Print the copied text to the console
     
+    # Write the copied API to a file (append mode)
     with open('api.txt', 'a') as api_file:
         api_file.write(f"{copied_text}\n")
     
+    # Jeda 5 detik
     time.sleep(5)
+    
+    # Tutup browser setelah satu email diproses
     driver.quit()
+    
+    # Tunggu sebentar sebelum mengulangi proses jika masih ada email
     time.sleep(2)
 
+# Setelah semua email diproses, program selesai
 print("Semua email selesai diproses.")
