@@ -23,27 +23,6 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run instance 1
+      - name: Run create.py
         run: |
-          echo "Running instance 1"
-          python create2.py && python run2.py
-
-      - name: Run instance 2
-        run: |
-          echo "Running instance 2"
-          python create2.py && python run2.py
-
-      - name: Run instance 3
-        run: |
-          echo "Running instance 3"
-          python create2.py && python run2.py
-
-      - name: Run instance 4
-        run: |
-          echo "Running instance 4"
-          python create2.py && python run2.py
-
-      - name: Run instance 5
-        run: |
-          echo "Running instance 5"
           python create2.py && python run2.py
