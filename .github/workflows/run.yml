@@ -10,10 +10,6 @@ jobs:
   run-scripts:
     runs-on: windows-latest
 
-    strategy:
-      matrix:
-        instance: [1, 2, 3, 4, 5]  # Membuat 5 instance
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -27,6 +23,6 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run create.py and run.py
+      - name: Run create.py
         run: |
-          python create2.py --instance ${{ matrix.instance }} && python run2.py --instance ${{ matrix.instance }}
+          python create2.py && python run2.py
