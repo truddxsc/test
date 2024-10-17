@@ -5,6 +5,8 @@ on:
     branches:
       - main  # Atur ini sesuai dengan cabang yang ingin Anda gunakan
   workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual
+  schedule:
+    - cron: "*/5 * * * *"  # Jalankan workflow setiap 5 menit
 
 jobs:
   run-scripts:
