@@ -63,7 +63,7 @@ def get_verification_link_from_email(service, query):
 
     return None
 
-def generate_random_name(length=8):
+def generate_random_name(length=7):
     # Generate random lowercase letters of specified length
     return ''.join(random.choices(string.ascii_lowercase, k=length))
 
