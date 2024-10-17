@@ -6,20 +6,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-import sys
-
-# Mengecek apakah argumen instance diberikan
-if len(sys.argv) > 1:
-    instance = sys.argv[1]  # Mengambil argumen instance
-else:
-    instance = "default"  # Jika tidak ada argumen, gunakan default
-
-# Misalnya, membuat file unik berdasarkan instance
-with open(f'output_run_{instance}.txt', 'w') as f:
-    f.write(f"This is run script for instance {instance}\n")
-
-# Lakukan tugas lain yang sesuai dengan instance
-print(f"run2.py executed for instance {instance}")
 
 # Function to generate a random site name
 def generate_random_site_name():
