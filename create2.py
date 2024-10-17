@@ -13,6 +13,21 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+import sys
+
+# Mengecek apakah argumen instance diberikan
+if len(sys.argv) > 1:
+    instance = sys.argv[1]  # Mengambil argumen instance
+else:
+    instance = "default"  # Jika tidak ada argumen, gunakan default
+
+# Misalnya, membuat file unik berdasarkan instance
+with open(f'output_create_{instance}.txt', 'w') as f:
+    f.write(f"This is create script for instance {instance}\n")
+
+# Lakukan tugas lain yang sesuai dengan instance
+print(f"create2.py executed for instance {instance}")
+
 
 # Scopes untuk mengakses Gmail API
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
