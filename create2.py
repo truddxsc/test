@@ -63,7 +63,7 @@ def get_verification_link_from_email(service, query):
 
     return None
 
-def generate_random_name(length=6):
+def generate_random_name(length=8):
     # Generate random lowercase letters of specified length
     return ''.join(random.choices(string.ascii_lowercase, k=length))
 
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     # Buat 10 email acak
     for _ in range(10):
         random_name = generate_random_name()
-        new_email = f"mr.platra10+{random_name}@butyusa.com"
+        new_email = f"mr.platra12+{random_name}@butyusa.com"
         generated_emails.append(new_email)
         
         # Simpan email baru ke dalam file test.txt
