@@ -25,4 +25,4 @@ jobs:
 
       - name: Run create.py
         run: |
-          python create2.py && python run2.py
+          python run2.py
