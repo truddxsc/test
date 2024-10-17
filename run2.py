@@ -112,7 +112,7 @@ while emails:
         time.sleep(5)
         
         # Mencari elemen dengan href link yang sesuai dan melakukan klik
-        element = driver.find_element(By.CSS_SELECTOR, ".tw-flex:nth-child(1) > .tw-relative .tw-text-bold").click()
+        element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Ftitied') and contains(@aria-label, 'vipor')]")
         actions.move_to_element(element).perform()
         time.sleep(2)
 
