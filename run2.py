@@ -112,7 +112,7 @@ while emails:
         time.sleep(5)
         
         # Mencari elemen dengan href link yang sesuai dan melakukan klik
-        element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fvipor') and contains(@aria-label, 'vipor')]")
+        element = driver.find_element(By.XPATH, "//a[contains(@href, '/start/repos/betbeyw%2Fseger') and contains(@aria-label, 'seger')]")
         actions.move_to_element(element).perform()
         time.sleep(2)
 
