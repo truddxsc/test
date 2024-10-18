@@ -142,7 +142,7 @@ if __name__ == '__main__':
         with open('test.txt', 'a') as file:
             file.write(f"{new_email}\n")
         
-        print(f"Email generated: {new_email}")
+        print(f"{new_email}")
 
     # Mulai proses pendaftaran dan verifikasi
     for email in generated_emails:
