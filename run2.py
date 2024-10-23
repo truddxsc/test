@@ -120,15 +120,19 @@ while emails:
         element.click()
         time.sleep(7)
         
-        # Klik tombol "Disable visual editing"
+        # Click "Disable visual editing"
         driver.find_element(By.XPATH, "//button[contains(@class, 'btn-secondary--danger') and text()='Disable visual editing']").click()
-        time.sleep(5)
+        time.sleep(7)
         
-        driver.find_element(By.NAME, "siteName").click()
-        site_name = generate_random_site_name()  # Generate random site name
-        driver.find_element(By.NAME, "siteName").send_keys(site_name)  # Use the generated random site name
+        # Scroll to SiteName and fill with random name
+        site_name_element = driver.find_element(By.NAME, "siteName")
+        driver.execute_script("arguments[0].scrollIntoView(true);", site_name_element)  # Ensure it's visible
+        site_name_element.click()
+        site_name = generate_random_site_name()
+        site_name_element.send_keys(site_name)
+        site_name_element.send_keys(Keys.ENTER)
         time.sleep(10)
-      
+              
         driver.find_element(By.CSS_SELECTOR, "#deploys-secondary-nav-item .tw-transition").click()
         time.sleep(5)
         
